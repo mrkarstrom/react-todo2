@@ -14,6 +14,25 @@ export default function App() {
         { id: crypto.randomUUID(), title: newItem, completed: false },
       ];
     });
+
+    setNewItem('');
+  }
+
+  function toggleTodo(id, completed) {
+    setTodos((currentTodos) => {
+      return currentTodos.map((todo) => {
+        if (todo.id === id) {
+          return { ...todo, completed };
+        }
+        return todo;
+      });
+    });
+  }
+
+  function handleDelete(id) {
+    setTodos((currentTodos) => {
+      return currentTodos.filter((todo) => todo.id !== id);
+    });
   }
 
   return (
@@ -39,12 +58,22 @@ export default function App() {
         <ul className="list">
           {todos.map((todo) => {
             return (
-              <li className="my-4">
-                <label htmlFor="item1">
-                  <input type="checkbox" id="item1" checked={todo.completed} />
+              <li className="my-4" key={todo.id}>
+                <label htmlFor="item">
+                  <input
+                    id="item"
+                    type="checkbox"
+                    checked={todo.completed}
+                    onChange={(e) => toggleTodo(todo.id, e.target.checked)}
+                  />
                   {todo.title}
                 </label>
-                <button className="bg-red-500 ">Delete</button>
+                <button
+                  className="bg-red-500 "
+                  onClick={() => handleDelete(todo.id)}
+                >
+                  Delete
+                </button>
               </li>
             );
           })}
